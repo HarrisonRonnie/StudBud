@@ -27,7 +27,30 @@
 	<div class="slider">
 
 		<div class="slide active">
-			<div class="main">
+			
+                <div class="container">
+      <h1 class="screen">
+        <span id="minutes">
+          00
+        </span>:<span id="seconds">
+          00
+        </span>:<span id="hundredths">
+          00
+        </span>
+      </h1>
+      <div class="buttons">
+        <button id="start">Start</button>
+        <button id="stop">Pause</button>
+        <button id="reset">Reset</button>
+      </div>
+    
+  	</div>
+ </div>
+
+<!-- sec2 -->
+		<div class="slide queue">
+
+ <div class="main">
 				<!--- left part --->
 				<div class="left">
 					<!--- song img --->
@@ -61,28 +84,9 @@
         <div class="duration">
            <input type="range" min="0" max="100" value="0" id="duration_slider" onchange="change_duration()">
         </div>
-  	</div>
- </div>
 
-<!-- sec2 -->
-		<div class="slide queue">
-          <div class="container">
-      <h1 class="screen">
-        <span id="minutes">
-          00
-        </span>:<span id="seconds">
-          00
-        </span>:<span id="hundredths">
-          00
-        </span>
-      </h1>
-      <div class="buttons">
-        <button id="start">Start</button>
-        <button id="stop">Pause</button>
-        <button id="reset">Reset</button>
-      </div>
-    </div>
 			<div class="bg"></div>
+  	 </div>
 		</div>
 <!-- sec2end -->
 
