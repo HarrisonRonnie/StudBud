@@ -332,39 +332,6 @@ body {
   margin-top: 60px;
   display: flex;
 }
-#infos {
-  display: flex;
-}
-#infos .square {
-  height: 50px;
-  width: 50px;
-  border-radius: 4px;
-  background-color: rgb(132, 0, 255);
-}
-#infos .square #letter {
-  font-size: 36px;
-  font-family: 'Lato', Arial, Helvetica, sans-serif;
-  color: white;
-  font-weight: 900;
-  margin: 5px 0px 0px 16px;
-}
-#infos #infos-content {
-  margin-left: 24px;
-}
-#infos .infos-title {
-  font-family: 'Lato';
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 24px;
-  color: #1B2437;
-}
-#infos .infos-company {
-  font-family: 'Lato';
-  font-style: italic;
-  font-size: 16px;
-  line-height: 19px;
-  color: #AAACAF;
-}
 #add-task-form {
   position: absolute;
   right: 100px;
@@ -405,7 +372,8 @@ body {
   box-shadow: 0px 4px 20px rgba(71, 134, 255, 0.5);
 }
 #columns {
-  margin-top: 40px;
+  margin-top: 10px;
+  padding: 10%;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -483,4 +451,32 @@ body {
 }
 .invisible {
   display: none;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25%;
+  height: 200px;
+  margin: 10px -5px 0;
+}
+
+.buttons button {
+  flex: 1;
+  margin: 10 5px;
+  border: none;
+  font-size: 20px;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: rgb(0, 158, 163);
+  outline: none;
+  cursor: pointer;
+}
+
+.buttons button:hover {
+  color: rgb(54, 0, 124);
+  background-color: #ffffff;
 }
