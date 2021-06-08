@@ -596,3 +596,18 @@ footer {
   }
 }
 
+section .searchResult {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 100px 400px;
+}
+
+section .searchResult div h1 {
+   font-size: 25px;
+}
+
+section .searchResult div p {
+    font-size: 15px;
+}
