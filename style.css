@@ -259,8 +259,16 @@ input[type="range"]::-webkit-slider-thumb{
 }
 
 .sidenav a:hover {
-  color: rgb(147, 64, 255);
+  color: rgb(200, 159, 255);
 } 
+
+@media screen and (max-width: 600px) {
+  .sidenav a {
+    text-align: left;
+    font-size: 10px;
+    float: none;
+  }
+}
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap");
@@ -393,6 +401,13 @@ body {
   background-color: white;
 }
 
+@media screen and (max-width: 600px) { 
+.column {
+  width: 125px;
+  height: 260px;
+}
+}
+
 .col {
   float: center;
   width: 75%;
@@ -454,6 +469,14 @@ body {
 .task .trash:hover {
   cursor: pointer;
 }
+
+@media screen and (max-width: 600px) {
+  .task {
+    min-height: 40px;
+    width: 50px; 
+  }
+}
+
 .hold:active:hover {
   border: solid 3px blue;
 }
