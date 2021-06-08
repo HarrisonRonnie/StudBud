@@ -69,8 +69,8 @@ $(document).ready(function () {
 
   $(document).on("wheel", wheely);
   $(document).on("keydown", hotkeys);
- // $(document).on("touchstart mousedown", dragStart);
- // $(document).on("touchend mouseup", dragEnd);
+  // $(document).on("touchstart mousedown", dragStart);
+  // $(document).on("touchend mouseup", dragEnd);
 });
 
 
@@ -176,3 +176,372 @@ const STOPWATCH = Stopwatch.ready();
 
 
 // Music Player
+let previous = document.querySelector('#pre');
+let play = document.querySelector('#play');
+let next = document.querySelector('#next');
+let title = document.querySelector('#title');
+let recent_volume = document.querySelector('#volume');
+let volume_show = document.querySelector('#volume_show');
+let slider = document.querySelector('#duration_slider');
+let show_duration = document.querySelector('#show_duration');
+
+let auto_play = document.querySelector('#auto');
+let present = document.querySelector('#present');
+let total = document.querySelector('#total');
+let artist = document.querySelector('#artist');
+
+
+
+let timer;
+let autoplay = 0;
+
+let index_no = 0;
+let Playing_song = false;
+
+//create a audio Element
+let track = document.createElement('audio');
+
+
+//All songs list
+let All_song = [
+  {
+    name: "first song",
+    path: "music/song1.mp3",
+    singer: "1"
+  },
+  {
+    name: "second song",
+    path: "music/song2.mp3",
+    singer: "2"
+  },
+  {
+    name: "third song",
+    path: "music/song3.mp3",
+    singer: "3"
+  },
+  {
+    name: "fourth song",
+    path: "music/song4.mp3",
+    singer: "4"
+  },
+  {
+    name: "fifth song",
+    path: "music/song5.mp3",
+    singer: "5"
+  }
+];
+
+
+// All functions
+
+
+// function load the track
+function load_track(index_no) {
+  clearInterval(timer);
+  reset_slider();
+
+  track.src = All_song[index_no].path;
+  title.innerHTML = All_song[index_no].name;
+  artist.innerHTML = All_song[index_no].singer;
+  track.load();
+
+  timer = setInterval(range_slider, 1000);
+  total.innerHTML = All_song.length;
+  present.innerHTML = index_no + 1;
+}
+
+load_track(index_no);
+
+
+//mute sound function
+function mute_sound() {
+  track.volume = 0;
+  volume.value = 0;
+  volume_show.innerHTML = 0;
+}
+
+
+// checking.. the song is playing or not
+function justplay() {
+  if (Playing_song == false) {
+    playsong();
+
+  } else {
+    pausesong();
+  }
+}
+
+
+// reset song slider
+function reset_slider() {
+  slider.value = 0;
+}
+
+// play song
+function playsong() {
+  track.play();
+  Playing_song = true;
+  play.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
+}
+
+//pause song
+function pausesong() {
+  track.pause();
+  Playing_song = false;
+  play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+}
+
+
+// next song
+function next_song() {
+  if (index_no < All_song.length - 1) {
+    index_no += 1;
+    load_track(index_no);
+    playsong();
+  } else {
+    index_no = 0;
+    load_track(index_no);
+    playsong();
+
+  }
+}
+
+
+// previous song
+function previous_song() {
+  if (index_no > 0) {
+    index_no -= 1;
+    load_track(index_no);
+    playsong();
+
+  } else {
+    index_no = All_song.length;
+    load_track(index_no);
+    playsong();
+  }
+}
+
+
+// change volume
+function volume_change() {
+  volume_show.innerHTML = recent_volume.value;
+  track.volume = recent_volume.value / 100;
+}
+
+// change slider position 
+function change_duration() {
+  slider_position = track.duration * (slider.value / 100);
+  track.currentTime = slider_position;
+}
+
+// autoplay function
+function autoplay_switch() {
+  if (autoplay == 1) {
+    autoplay = 0;
+    auto_play.style.background = "rgba(255,255,255,0.2)";
+  } else {
+    autoplay = 1;
+    auto_play.style.background = "#FF8A65";
+  }
+}
+
+
+function range_slider() {
+  let position = 0;
+
+  // update slider position
+  if (!isNaN(track.duration)) {
+    position = track.currentTime * (100 / track.duration);
+    slider.value = position;
+  }
+
+
+  // function will run when the song is over
+  if (track.ended) {
+    play.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+    if (autoplay == 1) {
+      index_no += 1;
+      load_track(index_no);
+      playsong();
+    }
+  }
+}
+
+
+
+// Tasklist 
+
+// Setting up variables for our HTML elements using DOM selection
+const form = document.getElementById("taskform");
+const button = document.querySelector("#taskform > button"); // Complex CSS query
+const tasklist = document.getElementById("tasklist");
+const taskInput = document.getElementById("taskInput");
+
+// Event listener for Button click
+// This could also be form.addEventListener("submit", function() {...} )
+button.addEventListener("click", function (event) {
+  event.preventDefault(); // Not as necessary for button, but needed for form submit
+
+  let task = form.elements.task.value; // could be swapped out for line below
+  //let task = taskInput.value;
+
+  let date = (new Date()).toLocaleDateString('en-US') //Convert to short date format
+
+  // Call the addTask() function using
+  addTask(task, date, "26/03/2021", "Low", ["1", "30"], false);
+
+  // Log out the newly populated taskList everytime the button has been pressed
+  console.log(taskList);
+})
+
+// Create an empty array to store our tasks
+var taskList = [];
+
+function addTask(taskDescription, createdDate, dueDate, priorityRating, estimatedTime, completionStatus) {
+  let task = {
+    taskDescription,
+    createdDate,
+    dueDate,
+    priorityRating,
+    estimatedTime,
+    completionStatus
+  };
+
+  // Add the task to our array of tasks
+  taskList.push(task);
+
+  // Separate the DOM manipulation from the object creation logic
+  renderTask(task);
+}
+
+
+// Function to display the item on the page
+function renderTask(task) {
+  let item = document.createElement("li");
+  item.innerHTML = "<p>" + task.taskDescription + "</p>";
+
+  tasklist.appendChild(item);
+
+  // Setup delete button DOM elements
+  let delButton = document.createElement("button");
+  let delButtonText = document.createTextNode("Delete");
+  delButton.appendChild(delButtonText);
+  item.appendChild(delButton); // Adds a delete button to every task
+
+  // Listen for when the 
+  delButton.addEventListener("click", function (event) {
+    item.remove(); // Remove the task item from the page when button clicked
+    // Because we used 'let' to define the item, this will always delete the right element
+  })
+
+  // Clear the value of the input once the task has been added to the page
+  form.reset();
+}
+
+
+//Kanban Board
+
+document.getElementById('add-task').addEventListener('click', function () {
+  let taskValue = document.getElementById('task-value').value;
+  if (taskValue) newTask(taskValue);
+  document.getElementById('task-value').value = '';
+});
+
+const newTask = (taskValue) => {
+  let task = document.createElement('li');
+  task.classList.add('task');
+  task.classList.add('fill');
+  task.setAttribute("draggable", "true");
+  task.addEventListener('dragstart', dragStart);
+  task.addEventListener('dragend', dragEnd);
+
+  let taskContent = document.createElement('div');
+  taskContent.classList.add('task-content');
+  taskContent.innerText = taskValue;
+
+  let trash = document.createElement('div');
+  trash.classList.add('trash');
+  trash.innerText = "X";
+  trash.addEventListener('click', removeTask);
+
+  task.appendChild(taskContent);
+  task.appendChild(trash);
+
+  let tasks = document.getElementById('tasks-added');
+  tasks.insertBefore(task, tasks.childNodes[0]);
+}
+
+const removeTask = (event) => {
+  let tasks = event.target.parentNode.parentNode;
+  let task = event.target.parentNode;
+  tasks.removeChild(task);
+}
+
+
+// DRAG & DROP
+
+let task
+
+const dragStart = (event) => {
+  // console.log(event.target);
+  event.target.className += ' hold';
+  task = event.target;
+  setTimeout(() => (event.target.className = 'invisible'), 0);
+}
+
+const dragEnd = (event) => {
+  // console.log(event.target);
+  event.target.className = 'task fill';
+}
+
+const dropzones = document.querySelectorAll('.dropzone');
+
+const dragEnter = (event) => {
+  // console.log("ENTER");
+  event.preventDefault();
+  if (event.target.className === "column dropzone") {
+    event.target.className += ' hovered';
+  }
+}
+
+const dragOver = (event) => {
+  // console.log("OVER");
+  event.preventDefault();
+}
+
+const dragLeave = (event) => {
+  // console.log("LEAVE");
+  if (event.target.className === "column dropzone hovered") {
+    event.target.className = "column dropzone"
+  }
+}
+
+const dragDrop = (event) => {
+  // console.log("DROP");
+  if (event.target.className === "column dropzone hovered") {
+    event.target.className = "column dropzone"
+  }
+  event.target.append(task);
+}
+
+for (const dropzone of dropzones) {
+  dropzone.addEventListener('dragenter', dragEnter);
+  dropzone.addEventListener('dragover', dragOver);
+  dropzone.addEventListener('dragleave', dragLeave);
+  dropzone.addEventListener('drop', dragDrop);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
