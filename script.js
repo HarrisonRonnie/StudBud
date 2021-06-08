@@ -531,17 +531,157 @@ for (const dropzone of dropzones) {
   dropzone.addEventListener('drop', dragDrop);
 }
 
+// pomodoro
+
+const circle = document.querySelector(".progress-ring__circle");
+const radius = circle.r.baseVal.value;
+const circumference = radius * 2 * Math.PI;
+
+circle.style.strokeDasharray = circumference;
+circle.style.strokeDashoffset = circumference;
+
+function setProgress(percent) {
+  const offset = circumference - (percent / 100) * circumference;
+  circle.style.strokeDashoffset = offset;
+}
+const el = document.querySelector(".clock");
+const bell = document.querySelector("audio");
+
+const mindiv = document.querySelector(".mins");
+const secdiv = document.querySelector(".secs");
+
+const startBtn = document.querySelector(".start");
+localStorage.setItem("btn", "focus");
+
+let initial, totalsecs, perc, paused, mins, seconds;
+
+startBtn.addEventListener("click", () => {
+  let btn = localStorage.getItem("btn");
+
+  if (btn === "focus") {
+    mins = +localStorage.getItem("focusTime") || 1;
+  } else {
+    mins = +localStorage.getItem("breakTime") || 1;
+  }
+
+  seconds = mins * 60;
+  totalsecs = mins * 60;
+  setTimeout(decremenT(), 60);
+  startBtn.style.transform = "scale(0)";
+  paused = false;
+});
+
+function decremenT() {
+  mindiv.textContent = Math.floor(seconds / 60);
+  secdiv.textContent = seconds % 60 > 9 ? seconds % 60 : `0${seconds % 60}`;
+  if (circle.classList.contains("danger")) {
+    circle.classList.remove("danger");
+  }
+
+  if (seconds > 0) {
+    perc = Math.ceil(((totalsecs - seconds) / totalsecs) * 100);
+    setProgress(perc);
+    seconds--;
+    initial = window.setTimeout("decremenT()", 1000);
+    if (seconds < 10) {
+      circle.classList.add("danger");
+    }
+  } else {
+    mins = 0;
+    seconds = 0;
+    bell.play();
+    let btn = localStorage.getItem("btn");
+
+    if (btn === "focus") {
+      startBtn.textContent = "start break";
+      startBtn.classList.add("break");
+      localStorage.setItem("btn", "break");
+    } else {
+      startBtn.classList.remove("break");
+      startBtn.textContent = "Start Focus";
+      localStorage.setItem("btn", "focus");
+    }
+    startBtn.style.transform = "scale(1)";
+  }
+}
+
+const focusTimeInput = document.querySelector("#focusTime");
+const breakTimeInput = document.querySelector("#breakTime");
+const pauseBtn = document.querySelector(".pause");
+
+focusTimeInput.value = localStorage.getItem("focusTime");
+breakTimeInput.value = localStorage.getItem("breakTime");
+
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  localStorage.setItem("focusTime", focusTimeInput.value);
+  localStorage.setItem("breakTime", breakTimeInput.value);
+});
+
+document.querySelector(".reset").addEventListener("click", () => {
+  startBtn.style.transform = "scale(1)";
+  clearTimeout(initial);
+  setProgress(0);
+  mindiv.textContent = 0;
+  secdiv.textContent = 0;
+});
+
+pauseBtn.addEventListener("click", () => {
+  if (paused === undefined) {
+    return;
+  }
+  if (paused) {
+    paused = false;
+    initial = setTimeout("decremenT()", 60);
+    pauseBtn.textContent = "Pause";
+    pauseBtn.classList.remove("Resume");
+  } else {
+    clearTimeout(initial);
+    pauseBtn.textContent = "Resume";
+    pauseBtn.classList.add("Resume");
+    paused = true;
+  }
+});
 
 
+// Dictionary
 
+function reloadPage() {
+    location.reload();
+}
 
+function wordSearch() {
+    document.getElementById('searchResult').style.visibility = 'visible';
 
+    var word = document.getElementById('word');
+    var definition = document.getElementById('definition');
+    var example = document.getElementById('example');
+    var spell = document.getElementById('spell');
 
+    var wordToSearch = document.getElementById('searchBox').value;
 
+    var request1 = new XMLHttpRequest();
+    request1.open('GET', 'https://api.wordnik.com/v4/word.json/' + wordToSearch + '/definitions?limit=10&includeRelated=false&useCanonical=false&includeTags=false&api_key=knx2dcz3y46a0645g0qqnq7e7o7xkwjnhopg7hs8n72jxz9fx', true);
+    request1.onload = function () {
+        var data = JSON.parse(this.response);
+        if (request1.status >= 200 && request1.status < 400) {
+            definition.innerHTML = data[i].text;
+        } else {
+            word.innerHTML = "Error";
+            definition.innerHTML = "Error";
+        }
+    }
+    request1.send();
 
-
-
-
-
-
-
+    var request2 = new XMLHttpRequest();
+    request2.open('GET', 'https://api.wordnik.com/v4/word.json/' + wordToSearch + '/topExample?useCanonical=false&api_key=knx2dcz3y46a0645g0qqnq7e7o7xkwjnhopg7hs8n72jxz9fx', true);
+    request2.onload = function () {
+        var data2 = JSON.parse(this.response);
+        if (request2.status >= 200 && request2.status < 400) {
+            example.innerHTML = data2.text;
+        } else {
+            example.innerHTML = "Error";
+        }
+    }
+    request2.send();
+}
