@@ -656,7 +656,6 @@ function wordSearch() {
     var word = document.getElementById('word');
     var definition = document.getElementById('definition');
     var example = document.getElementById('example');
-    var spell = document.getElementById('spell');
 
     var wordToSearch = document.getElementById('searchBox').value;
 
@@ -665,6 +664,8 @@ function wordSearch() {
     request1.onload = function () {
         var data = JSON.parse(this.response);
         if (request1.status >= 200 && request1.status < 400) {
+            var i = Math.ceil(Math.random() * 10);      //  get a random number from 1 to 10
+            word.innerHTML = data[i].word;      //  get a random definition
             definition.innerHTML = data[i].text;
         } else {
             word.innerHTML = "Error";
