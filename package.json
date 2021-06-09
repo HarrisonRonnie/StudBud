@@ -1,0 +1,28 @@
+{
+  "name": "studbud",
+  "version": "1.0.0",
+  "description": "study interactive tool",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarrisonRonnie/StudBud.git"
+  },
+  "keywords": [
+    "Study",
+    "Online",
+    "Help"
+  ],
+  "author": "Harrison Ronnie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HarrisonRonnie/StudBud/issues"
+  },
+  "homepage": "https://github.com/HarrisonRonnie/StudBud#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
