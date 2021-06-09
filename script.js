@@ -1,7 +1,6 @@
 // Smooth scrolling function
 // Code from: 
 
-
 $(document).ready(function () {
   var timeStart = 0;
 
@@ -371,73 +370,70 @@ function range_slider() {
 
 // Tasklist 
 
-// Setting up variables for our HTML elements using DOM selection
 const form = document.getElementById("taskform");
-const button = document.querySelector("#taskform > button"); // Complex CSS query
-const tasklist = document.getElementById("tasklist");
-const taskInput = document.getElementById("taskInput");
+const button = document.querySelector("#taskform > button")
+var taskInput = document.getElementById("taskInput");
+var tasklist = document.getElementById("tasklist");
 
-// Event listener for Button click
-// This could also be form.addEventListener("submit", function() {...} )
-button.addEventListener("click", function (event) {
-  event.preventDefault(); // Not as necessary for button, but needed for form submit
+var dueDateInput = document.getElementById("dueDateInput");
+var completionTimeInput = document.getElementById("completionTimeInput");
+var estimatedTimeInput = document.getElementById("estimatedTimeInput");
+var priorityInput = document.getElementById("priorityInput");
 
-  let task = form.elements.task.value; // could be swapped out for line below
-  //let task = taskInput.value;
-
-  let date = (new Date()).toLocaleDateString('en-US') //Convert to short date format
-
-  // Call the addTask() function using
-  addTask(task, date, "26/03/2021", "Low", ["1", "30"], false);
-
-  // Log out the newly populated taskList everytime the button has been pressed
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  let task = taskInput.value;
+  let dueDate = dueDateInput.value;
+  let completionTime = completionTimeInput.value;
+  let estimatedTime = estimatedTimeInput.value;
+  let priorityRating = priorityInput.options[priorityInput.selectedIndex].value;
+  addTask(task, dueDate, estimatedTime, priorityRating, completionTime, false);
   console.log(taskList);
 })
 
-// Create an empty array to store our tasks
-var taskList = [];
+var taskListArray = [];
 
-function addTask(taskDescription, createdDate, dueDate, priorityRating, estimatedTime, completionStatus) {
+function addTask(taskDescription, dueDate, estimatedTime, priorityRating, completionTime, completionStatus) {
+  let d = new Date();
+  let dateCreated = d.getFullYear();
   let task = {
     taskDescription,
-    createdDate,
     dueDate,
+    dateCreated,
+    estimatedTime,
+    completionTime,
     priorityRating,
     estimatedTime,
     completionStatus
   };
-
-  // Add the task to our array of tasks
-  taskList.push(task);
-
-  // Separate the DOM manipulation from the object creation logic
+  taskListArray.push(task);
   renderTask(task);
 }
 
-
-// Function to display the item on the page
 function renderTask(task) {
+  // Create HTML elements
   let item = document.createElement("li");
   item.innerHTML = "<p>" + task.taskDescription + "</p>";
 
   tasklist.appendChild(item);
 
-  // Setup delete button DOM elements
+  // Extra Task DOM elements
   let delButton = document.createElement("button");
-  let delButtonText = document.createTextNode("Delete");
+  let delButtonText = document.createTextNode("Delete Task");
   delButton.appendChild(delButtonText);
-  item.appendChild(delButton); // Adds a delete button to every task
+  item.appendChild(delButton);
 
-  // Listen for when the 
+
+  // Event Listeners for DOM elements
   delButton.addEventListener("click", function (event) {
-    item.remove(); // Remove the task item from the page when button clicked
-    // Because we used 'let' to define the item, this will always delete the right element
+    event.preventDefault();
+    item.remove();
   })
 
-  // Clear the value of the input once the task has been added to the page
+
+  // Clear the input form
   form.reset();
 }
-
 
 //Kanban Board
 
@@ -476,7 +472,6 @@ const removeTask = (event) => {
   let task = event.target.parentNode;
   tasks.removeChild(task);
 }
-
 
 // DRAG & DROP
 
@@ -643,46 +638,45 @@ pauseBtn.addEventListener("click", () => {
   }
 });
 
-
 // Dictionary
 
 function reloadPage() {
-    location.reload();
+  location.reload();
 }
 
 function wordSearch() {
-    document.getElementById('searchResult').style.visibility = 'visible';
+  document.getElementById('searchResult').style.visibility = 'visible';
 
-    var word = document.getElementById('word');
-    var definition = document.getElementById('definition');
-    var example = document.getElementById('example');
+  var word = document.getElementById('word');
+  var definition = document.getElementById('definition');
+  var example = document.getElementById('example');
 
-    var wordToSearch = document.getElementById('searchBox').value;
+  var wordToSearch = document.getElementById('searchBox').value;
 
-    var request1 = new XMLHttpRequest();
-    request1.open('GET', 'https://api.wordnik.com/v4/word.json/' + wordToSearch + '/definitions?limit=10&includeRelated=false&useCanonical=false&includeTags=false&api_key=knx2dcz3y46a0645g0qqnq7e7o7xkwjnhopg7hs8n72jxz9fx', true);
-    request1.onload = function () {
-        var data = JSON.parse(this.response);
-        if (request1.status >= 200 && request1.status < 400) {
-            var i = Math.ceil(Math.random() * 10);      //  get a random number from 1 to 10
-            word.innerHTML = data[i].word;      //  get a random definition
-            definition.innerHTML = data[i].text;
-        } else {
-            word.innerHTML = "Error";
-            definition.innerHTML = "Error";
-        }
+  var request1 = new XMLHttpRequest();
+  request1.open('GET', 'https://api.wordnik.com/v4/word.json/' + wordToSearch + '/definitions?limit=10&includeRelated=false&useCanonical=false&includeTags=false&api_key=knx2dcz3y46a0645g0qqnq7e7o7xkwjnhopg7hs8n72jxz9fx', true);
+  request1.onload = function () {
+    var data = JSON.parse(this.response);
+    if (request1.status >= 200 && request1.status < 400) {
+      var i = Math.ceil(Math.random() * 10);      //  get a random number from 1 to 10
+      word.innerHTML = data[i].word;      //  get a random definition
+      definition.innerHTML = data[i].text;
+    } else {
+      word.innerHTML = "Error";
+      definition.innerHTML = "Error";
     }
-    request1.send();
+  }
+  request1.send();
 
-    var request2 = new XMLHttpRequest();
-    request2.open('GET', 'https://api.wordnik.com/v4/word.json/' + wordToSearch + '/topExample?useCanonical=false&api_key=knx2dcz3y46a0645g0qqnq7e7o7xkwjnhopg7hs8n72jxz9fx', true);
-    request2.onload = function () {
-        var data2 = JSON.parse(this.response);
-        if (request2.status >= 200 && request2.status < 400) {
-            example.innerHTML = data2.text;
-        } else {
-            example.innerHTML = "Error";
-        }
+  var request2 = new XMLHttpRequest();
+  request2.open('GET', 'https://api.wordnik.com/v4/word.json/' + wordToSearch + '/topExample?useCanonical=false&api_key=knx2dcz3y46a0645g0qqnq7e7o7xkwjnhopg7hs8n72jxz9fx', true);
+  request2.onload = function () {
+    var data2 = JSON.parse(this.response);
+    if (request2.status >= 200 && request2.status < 400) {
+      example.innerHTML = data2.text;
+    } else {
+      example.innerHTML = "Error";
     }
-    request2.send();
+  }
+  request2.send();
 }

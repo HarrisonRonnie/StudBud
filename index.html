@@ -3,7 +3,8 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>vertical slider</title>
+	<title>StudBud</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="style.css" />
 	<script src="https://code.jquery.com/jquery-3.3.1.js">
 
@@ -24,8 +25,8 @@
 
 	<div class="slider">
 		<div class="slide active">
-			
-      <div class="container">
+
+			<div class="container">
 				<h1 class="screen">
 					<span id="minutes">
           00
@@ -47,16 +48,13 @@
 		<div class="slide queue">
 
  <div class="main">
-				<!--- left part --->
 				<div class="left">
-					<!--- song img --->
 					<div class="volume">
 						<i class="fa fa-volume-up" aria-hidden="true" onclick="mute_sound()" id="volume_icon"></i>
             <input type="range" min="0" max="100" value="90" onchange="volume_change()" id="volume">  
          </div>
      </div>
  
-     <!--- right part --->
   	 <div class="right">
 
         <div class="show_song_no">
@@ -69,7 +67,7 @@
       <p id="title">title.mp3</p>
       <p id="artist">Artist name</p>
 
-      <!--- middle part --->
+      
   	 	<div class="middle">
   	       <button onclick="previous_song()" id="pre"><i class="fa fa-step-backward" aria-hidden="true"></i></button>
       	   <button onclick="justplay()" id="play"><i class="fa fa-play" aria-hidden="true"></i></button>
